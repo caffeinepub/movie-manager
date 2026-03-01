@@ -1,0 +1,58 @@
+type WatchStatus = 
+ variant {
+   Unwatched;
+   Watched;
+   Watchlist;
+ };
+type Rating = 
+ variant {
+   _1;
+   _2;
+   _3;
+   _4;
+   _5;
+ };
+type MovieId = nat;
+type Movie = 
+ record {
+   createdAt: int;
+   description: opt text;
+   director: text;
+   genre: Genre;
+   id: MovieId;
+   rating: opt Rating;
+   title: text;
+   watchStatus: WatchStatus;
+   year: nat;
+ };
+type Genre = 
+ variant {
+   Action;
+   Animation;
+   Comedy;
+   Documentary;
+   Drama;
+   Horror;
+   Other;
+   Romance;
+   SciFi;
+   Thriller;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+service : {
+  addMovie: (title: text, year: nat, genre: Genre, director: text, rating:
+   opt Rating, description: opt text, watchStatus: WatchStatus) -> (Movie);
+  deleteMovie: (id: MovieId) -> ();
+  getAllMovies: () -> (vec Movie) query;
+  getMovie: (id: MovieId) -> (opt Movie) query;
+  updateMovie: (id: MovieId, updatedMovie: Movie) -> (opt Movie);
+  _initializeAccessControlWithSecret: (userSecret: text) -> ();
+  getCallerUserRole: () -> (UserRole) query;
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  isCallerAdmin: () -> (bool) query;
+}
